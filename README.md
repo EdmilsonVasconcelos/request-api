@@ -5,7 +5,7 @@ Back-end do projeto de pedidos
 ### Tecnologias
 
 - Java 11
-- Spring boot
+- Spring Boot
 - Spring Data JPA
 - Spring Security
 - MySQL
