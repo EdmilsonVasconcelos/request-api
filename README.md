@@ -11,7 +11,7 @@ Back-end do projeto de pedidos
 
 # Para configurar o projeto:
 
-- Você precisará do MySQL. (O Xamp usado para o front-end tem o MySQL)
+- Você precisará do MySQL. (O Xamp usado para o front-end possui o MySQL)
 - Ao rodar o projeto pela primeira vez, o banco de dados e tabelas serão criadas automaticamente.
 
 # Para acessar a área de administrador
