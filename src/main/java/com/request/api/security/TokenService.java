@@ -2,7 +2,7 @@ package com.request.api.security;
 
 import java.util.Date;
 
-import com.request.api.model.User;
+import com.request.api.model.Admin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,9 @@ public class TokenService {
 
 	public String generateToken(Authentication authentication) {
 		
-		User userLogged = (User) authentication.getPrincipal();
+		Admin adminLogged = (Admin) authentication.getPrincipal();
 		
-		System.out.println(userLogged);
+		System.out.println(adminLogged);
 		
 		Date today = new Date();
 		
@@ -34,7 +34,7 @@ public class TokenService {
 		
 		String response = Jwts.builder()
 				.setIssuer("Api of request")
-				.setSubject(userLogged.getId().toString())
+				.setSubject(adminLogged.getId().toString())
 				.setIssuedAt(today)
 				.setExpiration(dateExpiration)
 				.signWith(SignatureAlgorithm.HS256, secret)

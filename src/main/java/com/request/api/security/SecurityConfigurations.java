@@ -1,6 +1,6 @@
 package com.request.api.security;
 
-import com.request.api.repository.UserRepository;
+import com.request.api.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	private TokenService tokenService;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private AdminRepository adminRepository;
 	
 	@Override
 	@Bean
@@ -44,7 +44,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers(HttpMethod.POST, "/v1/user").permitAll()
+			.antMatchers(HttpMethod.POST, "/v1/admin").permitAll()
 			.antMatchers(HttpMethod.POST, "/v1/auth").permitAll()
 			.antMatchers(HttpMethod.GET, "/v1/product").permitAll()
 				.antMatchers(HttpMethod.GET, "/v1/product/{idProduct}").permitAll()
@@ -52,7 +52,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 				.and().cors()
 			.and().csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and().addFilterBefore(new AuthenticationTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
+			.and().addFilterBefore(new AuthenticationTokenFilter(tokenService, adminRepository), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override

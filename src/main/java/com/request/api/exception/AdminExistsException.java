@@ -1,10 +1,10 @@
 package com.request.api.exception;
 
-public class UserExistsException extends RuntimeException {
+public class AdminExistsException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
 
-	public UserExistsException(String message){
+	public AdminExistsException(String message){
         super(message);
     }
 

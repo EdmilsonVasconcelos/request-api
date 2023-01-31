@@ -1,4 +1,4 @@
-package com.request.api.dto.user.request;
+package com.request.api.dto.admin.request;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChangePasswordRequestDTO {
 	
-	@NotNull(message = "The password of user is mandatory")
-	@Size(message = "The password of user must be between two and ninety characters", min = 2, max = 90)
+	@NotNull(message = "The password of admin is mandatory")
+	@Size(message = "The password of admin must be between two and ninety characters", min = 2, max = 90)
 	private String password;
 	
 }

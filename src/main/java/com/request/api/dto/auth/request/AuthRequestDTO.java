@@ -10,12 +10,12 @@ import lombok.Data;
 @Data
 public class AuthRequestDTO {
 	
-	@NotNull(message = "The email of user is mandatory")
-	@Size(message = "The email of user must be between two and fifty characters", min = 2, max = 50)
+	@NotNull(message = "The email of admin is mandatory")
+	@Size(message = "The email of admin must be between two and fifty characters", min = 2, max = 50)
 	private String email;
 	
-	@NotNull(message = "The password of user is mandatory")
-	@Size(message = "The password of user must be between two and fifty characters", min = 2, max = 1000)
+	@NotNull(message = "The password of admin is mandatory")
+	@Size(message = "The password of admin must be between two and fifty characters", min = 2, max = 1000)
 	private String password;
 	
 	public UsernamePasswordAuthenticationToken converter() {

@@ -1,4 +1,4 @@
-package com.request.api.dto.user.response;
+package com.request.api.dto.admin.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserSavedDTO {
+public class AdminSavedDTO {
 	
 	private Long id;
 	

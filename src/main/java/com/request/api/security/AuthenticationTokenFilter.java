@@ -7,8 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.request.api.model.User;
-import com.request.api.repository.UserRepository;
+import com.request.api.model.Admin;
+import com.request.api.repository.AdminRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,11 +17,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 	
 	private TokenService tokenService;
-	private UserRepository userRepository;
+	private AdminRepository adminRepository;
 
-	public AuthenticationTokenFilter(TokenService tokenService, UserRepository repository) {
+	public AuthenticationTokenFilter(TokenService tokenService, AdminRepository repository) {
 		this.tokenService = tokenService;
-		this.userRepository = repository;
+		this.adminRepository = repository;
 	}
 
 	@Override
@@ -43,9 +43,9 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
 		
 		Long idUser = tokenService.getUserId(token);
 		
-		User user = userRepository.findById(idUser).get();
+		Admin admin = adminRepository.findById(idUser).get();
 		
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(admin, null, admin.getAuthorities());
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		

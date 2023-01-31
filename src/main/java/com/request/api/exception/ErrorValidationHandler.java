@@ -38,8 +38,8 @@ public class ErrorValidationHandler {
 	}
 	
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(UserExistsException.class)
-	public ExceptionResponse handle(UserExistsException exception) {
+	@ExceptionHandler(AdminExistsException.class)
+	public ExceptionResponse handle(AdminExistsException exception) {
 		return new ExceptionResponse(exception.getMessage());
 	}
 	
