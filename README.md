@@ -11,11 +11,10 @@ Back-end do projeto de pedidos
 
 # Para configurar o projeto:
 
-- Você precisa ter configurado o Xamp.
-- Inicie o MySQL do Xamp.
-- Após isso, é necessário criar um usuário no banco de dados como administrador.
-    - Vá até a tabela admin.
-    - Você precisará de uma senha criptografada usando o BCryptPasswordEncoder para criar seu usuário direto no banco de dados e logar como administrador. Uma dica é usar o método main de inicialização do projeto, imprimindo a senha desejada. Ex: System.out.println(new BCryptPasswordEncoder().encode("123123")).
-- Ao rodar o projeto pela primeira vez, o banco de dados e as tabelas serão criadas automaticamente.
-- Acessar a url: http://localhost/request/admin
+- Você precisará do MySQL. (O Xamp usado para o front-end tem o MySQL)
+- Ao rodar o projeto pela primeira vez, o banco de dados e tabelas serão criadas automaticamente.
 
+# Para acessar a área de administrador
+
+- Crie um usuário usando a API: http://localhost/v1/admin/ passando o name, email e password. 
+- Acesse http://localhost/request/admin/ e logue com seu usuário.
