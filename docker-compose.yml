@@ -1,0 +1,20 @@
+version: "3"
+services:
+  springboot-app:
+    restart: always
+    build: .
+    ports:
+      - 8000:8080
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    platform: linux/x86_64
+    image: "mysql:5.7"
+    volumes:
+      -  /home/user/Desktop/db:/var/lib/mysql
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: request
+      MYSQL_ROOT_PASSWORD: root
