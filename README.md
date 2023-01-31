@@ -1,6 +1,4 @@
-# request-api
-
-Back-end do projeto de pedidos
+# Back-end do projeto de pedidos
 
 ### Tecnologias
 
