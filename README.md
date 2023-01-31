@@ -15,5 +15,5 @@
 
 # Para acessar a área de administrador
 
-- Crie um usuário usando a API: http://localhost/v1/admin/ passando o name, email e password. 
+- Crie um usuário usando a API: http://localhost/v1/admin passando o name, email e password. 
 - Acesse http://localhost/request/admin/ e logue com seu usuário.
