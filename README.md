@@ -11,7 +11,7 @@
 
 # Iniciando o projeto
 
-- Com o docker iniciado, vá até a raíz do projeto e use o comando `make run-app`. Depois disso você terá o container do `app` iniciado e todos os endpoints estarão disponíveis. Ao iniciar o projeto pela primeira vez, o banco de dados chamado `request` e todas as tabelas serão criados automaticamente.
+- Com o docker iniciado, vá até a raíz do projeto e use o comando `make run-app`. Depois disso você terá o container do `app` iniciado e todos os endpoints estarão disponíveis. Ao iniciar o projeto pela primeira vez, o banco de dados chamado `request` e todas as tabelas serão criados automaticamente. O projeto está rodando na `http://localhost:8080`.
 
 # Para acessar a área de administrador
 
