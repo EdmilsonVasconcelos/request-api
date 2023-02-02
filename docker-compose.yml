@@ -7,9 +7,6 @@ services:
     container_name: mysql
     networks:
       - requestapp
-    environment:
-      MYSQL_DATABASE: request
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
     volumes:
       - /home/docker/volumes/myapp/mysql/:/var/lib/mysql/
     ports:
