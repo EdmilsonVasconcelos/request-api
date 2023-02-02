@@ -16,7 +16,7 @@ public class AdminDTO {
 	
 	@NotNull(message = "The name of admin is mandatory")
 	@Size(message = "The name of admin must be between two and fifty characters", min = 2, max = 50)
-		private String name;
+	private String name;
 	
 	@NotNull(message = "The email of admin is mandatory")
 	@Size(message = "The email of admin must be between two and ninety characters", min = 2, max = 90)

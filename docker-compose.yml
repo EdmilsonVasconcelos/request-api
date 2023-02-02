@@ -1,20 +1,33 @@
-version: "3"
-services:
-  springboot-app:
-    restart: always
-    build: .
-    ports:
-      - 8000:8080
-    depends_on:
-      - mysqldb
+version: "3.8"
 
+services:
   mysqldb:
-    platform: linux/x86_64
-    image: "mysql:5.7"
-    volumes:
-      -  /home/user/Desktop/db:/var/lib/mysql
-    ports:
-      - 3307:3306
+    image: mysql:5.7
+    restart: unless-stopped
+    container_name: mysql
+    networks:
+      - requestapp
     environment:
       MYSQL_DATABASE: request
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    volumes:
+      - /home/docker/volumes/myapp/mysql/:/var/lib/mysql/
+    ports:
+      - "3306:3306"
+
+  app:
+    depends_on:
+      - mysqldb
+    build: .
+    container_name: app
+    networks:
+      - requestapp
+    restart: on-failure
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/request?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
+    ports:
+      - "8080:8080"
+
+networks:
+  requestapp:
+    driver: bridge

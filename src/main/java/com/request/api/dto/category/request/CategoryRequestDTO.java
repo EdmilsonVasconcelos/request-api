@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @Builder
 @Getter
 public class CategoryRequestDTO {
+
     private Long id;
 
     @NotNull(message = "O nome é obrigatório")

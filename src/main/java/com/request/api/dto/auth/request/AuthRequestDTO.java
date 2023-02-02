@@ -21,5 +21,4 @@ public class AuthRequestDTO {
 	public UsernamePasswordAuthenticationToken converter() {
 		return new UsernamePasswordAuthenticationToken(email, password);
 	}
-
 }
