@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
-run-back:
-	docker-compose up -d app
+run-app:
+	docker-compose up
 
-stop-back:
-	docker-compose stop app
+stop-app:
+	docker-compose compose down
