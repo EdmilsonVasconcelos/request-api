@@ -9,7 +9,7 @@
 - MySQL
 - Docker
 
-# Para configurar o projeto:
+# Iniciando o projeto
 
 - Com o docker iniciado, vá até a raíz do projeto e use o comando `make run-app`. Depois disso você terá o container do `MySQL` iniciado e todos os endpoints estarão disponíveis.
 
