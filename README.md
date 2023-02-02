@@ -11,7 +11,7 @@
 
 # Iniciando o projeto
 
-- Com o docker iniciado, vá até a raíz do projeto e use o comando `make run-app`. Depois disso você terá o container do `MySQL` iniciado e todos os endpoints estarão disponíveis.
+- Com o docker iniciado, vá até a raíz do projeto e use o comando `make run-app`. Depois disso você terá o container do `MySQL` iniciado e todos os endpoints estarão disponíveis. Ao iniciar o projeto pela primeira vez, o banco de dados chamado `request` e todas as tabelas serão criadas automaticamente.
 
 # Para acessar a área de administrador
 
