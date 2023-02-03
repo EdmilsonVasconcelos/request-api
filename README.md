@@ -25,4 +25,4 @@
   - usuário: root
   - senha: espaço em branco
   - banco de dados: request
-  - porta: 306
+  - porta: 3306
