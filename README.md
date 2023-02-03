@@ -15,7 +15,14 @@
 
 # Acessando a área de administrador
 
-- Crie um usuário usando o endpoint com o verbo `POST`: `http://localhost:8080/v1/admin` passando o `name`, `email` e `password`. 
+- Crie um usuário usando o endpoint com o verbo `POST`: `http://localhost:8080/v1/admin`. 
+```json
+{
+  "name": "teste",
+  "email": "teste@email.com",
+  "password": "yourpassword"
+}
+```
 - Acesse http://localhost/request/admin/ no sistema e logue com seu usuário.
 
 # Configurando um gerenciador de banco de dados
