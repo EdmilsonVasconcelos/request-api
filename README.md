@@ -15,7 +15,7 @@
 
 # Acessando a área de administrador
 
-- Crie um usuário usando o endpoint com o verbo `POST`: `http://localhost:8080/v1/admin`. 
+- Crie um usuário usando o endpoint com o verbo `POST`: `http://localhost:8080/v1/admin`
 ```json
 {
   "name": "teste",
@@ -27,7 +27,7 @@
 
 # Configurando um gerenciador de banco de dados
 
-- Escolha um gerenciador de bd de sua preferência. Alguns exemplos: `DBeaver`, `MySQL Workbeanch`.
+- Escolha um gerenciador de banco de dados de sua preferência. Alguns exemplos: `DBeaver`, `MySQL Workbeanch`.
 - Crie uma nova conexão
   - usuário: root
   - senha: espaço em branco
