@@ -9,9 +9,9 @@
 - MySQL
 - Docker
 
-# Iniciando o projeto
+# Para executar a aplicação local
 
-- Com o docker iniciado, vá até a raíz do projeto e use o comando `make run-app`. Depois disso você terá o container do `app` iniciado e todos os endpoints estarão disponíveis. Ao iniciar o projeto pela primeira vez, o banco de dados chamado `request` e todas as tabelas serão criados automaticamente. O projeto roda na `http://localhost:8080`.
+- Vá até a raíz do projeto e use o comando `make run-db` (você precisará do Docker), após isso o container do `MySQL` será iniciado. A partir deste momento você pode rodar a aplicação. Ao iniciar a aplicação pela primeira vez, o banco de dados `request` e todas as tabelas serão criadas automaticamente. Os endpoints estão rodando na `http://localhost:8080`.
 
 # Para acessar a área de administrador
 
