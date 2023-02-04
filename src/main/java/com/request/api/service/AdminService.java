@@ -2,7 +2,6 @@ package com.request.api.service;
 
 import com.request.api.dto.admin.request.AdminDTO;
 import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
-import com.request.api.dto.admin.response.AdminSavedDTO;
 import com.request.api.exception.AdminExistsException;
 import com.request.api.exception.AdminNotExistException;
 import com.request.api.model.Admin;
@@ -53,18 +52,14 @@ public class AdminService {
 		return adminRepository.save(adminToSave);
 	}
 	
-	public AdminSavedDTO changePassword(ChangePasswordRequestDTO request) {
+	public Admin changePassword(ChangePasswordRequestDTO request) {
 		String userLogged = getEmailAdminLogged();
 		
 		Admin adminToSave = getAdminByEmail(userLogged);
 		
 		adminToSave.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
 		
-		Admin adminSaved = adminRepository.save(adminToSave);
-		
-		AdminSavedDTO response = mapper.map(adminSaved, AdminSavedDTO.class);
-		
-		return response;
+		return adminRepository.save(adminToSave);
 	}
 	
 	private String getEmailAdminLogged() {
@@ -79,11 +74,13 @@ public class AdminService {
 	
 	public void deleteAdmin(Long idAdmin) {
 		checkAdminExists(idAdmin);
+
 		adminRepository.deleteById(idAdmin);
 	}
 	
 	private Admin getAdminByEmail(String email) {
-		return adminRepository.findByEmail(email).orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_NOT_EXISTS, email)));
+		return adminRepository.findByEmail(email)
+				.orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_NOT_EXISTS, email)));
 	}
 
 	private void checkAdminExists(String email) {
@@ -97,7 +94,7 @@ public class AdminService {
 	private void checkAdminExists(Long idUser) {
 		Optional<Admin> admin = adminRepository.findById(idUser);
 		
-		if(!admin.isPresent()) {
+		if(admin.isEmpty()) {
 			throw new AdminNotExistException(String.format(ADMIN_WITH_ID_NOT_EXISTS, idUser));
 		}
 	}

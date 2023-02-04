@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static com.request.api.dto.admin.response.AdminSavedDTO.toAdminSavedDTO;
 import static com.request.api.dto.admin.response.AdminSavedDTO.toListAdminSavedDTO;
 
 @RequestMapping("/v1/admin")
@@ -31,17 +32,9 @@ public class AdminController {
 	@Cacheable(value = "listAdmins")
 	public ResponseEntity<List<AdminSavedDTO>> getAllAdmins() {
 		List<Admin> admins = adminService.getAllAdmins();
-
 		return ResponseEntity.ok(toListAdminSavedDTO(admins));
 	}
 
-	@PutMapping(value = "/change-password")
-	@CacheEvict(value = "listAdmins", allEntries = true)
-	public ResponseEntity<AdminSavedDTO> updatePassword(@Valid @RequestBody ChangePasswordRequestDTO request) {
-		AdminSavedDTO adminSaved = adminService.changePassword(request);
-		return ResponseEntity.ok(adminSaved);
-	}
-	
 	@PostMapping
 	@CacheEvict(value = "listAdmins", allEntries = true)
 	public ResponseEntity<AdminSavedDTO> saveAdmin(@Valid @RequestBody AdminDTO request) {
@@ -53,6 +46,13 @@ public class AdminController {
 				.toUri();
 
 		return ResponseEntity.created(uri).body(adminSavedDTO);
+	}
+
+	@PutMapping(value = "/change-password")
+	@CacheEvict(value = "listAdmins", allEntries = true)
+	public ResponseEntity<AdminSavedDTO> changePassword(@Valid @RequestBody ChangePasswordRequestDTO request) {
+		Admin admin = adminService.changePassword(request);
+		return ResponseEntity.ok(toAdminSavedDTO(admin));
 	}
 	
 	@DeleteMapping
