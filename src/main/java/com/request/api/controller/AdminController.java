@@ -1,27 +1,22 @@
 package com.request.api.controller;
 
-import java.net.URI;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.dto.admin.request.AdminDTO;
+import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.dto.admin.response.AdminSavedDTO;
+import com.request.api.model.Admin;
 import com.request.api.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+
+import static com.request.api.dto.admin.response.AdminSavedDTO.toListAdminSavedDTO;
 
 @RequestMapping("/v1/admin")
 @AllArgsConstructor
@@ -33,10 +28,11 @@ public class AdminController {
 	@GetMapping
 	@Cacheable(value = "listAdmins")
 	public ResponseEntity<List<AdminSavedDTO>> getAllAdmins() {
-		List<AdminSavedDTO> response = adminService.getAllAdmins();
-		return ResponseEntity.ok(response);
+		List<Admin> admins = adminService.getAllAdmins();
+
+		return ResponseEntity.ok(toListAdminSavedDTO(admins));
 	}
-	
+
 	@PutMapping(value = "/change-password")
 	@CacheEvict(value = "listAdmins", allEntries = true)
 	public ResponseEntity<AdminSavedDTO> updatePassword(@Valid @RequestBody ChangePasswordRequestDTO request) {
