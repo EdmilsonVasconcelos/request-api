@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.request.api.model.Admin.toDomain;
+
 @Slf4j
 @Service
 public class AdminService {
@@ -41,18 +43,14 @@ public class AdminService {
 		return adminRepository.findAll();
 	}
 	
-	public AdminSavedDTO saveAdmin(AdminDTO request) {
+	public Admin saveAdmin(AdminDTO request) {
 		checkExistAdmin(request.getEmail());
 		
-		Admin adminToSave = mapper.map(request, Admin.class);
+		Admin adminToSave = toDomain(request);
 		
-		adminToSave.setPassword(new BCryptPasswordEncoder().encode(adminToSave.getPassword().toString()));
-		
-		Admin adminSaved = adminRepository.save(adminToSave);
-		
-		AdminSavedDTO response = mapper.map(adminSaved, AdminSavedDTO.class);
-		
-		return response;
+		adminToSave.setPassword(new BCryptPasswordEncoder().encode(adminToSave.getPassword()));
+
+		return adminRepository.save(adminToSave);
 	}
 	
 	public AdminSavedDTO changePassword(ChangePasswordRequestDTO request) {
@@ -60,7 +58,7 @@ public class AdminService {
 		
 		Admin adminToSave = getAdminByEmail(userLogged);
 		
-		adminToSave.setPassword(new BCryptPasswordEncoder().encode(request.getPassword().toString()));
+		adminToSave.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
 		
 		Admin adminSaved = adminRepository.save(adminToSave);
 		
