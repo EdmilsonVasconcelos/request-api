@@ -11,7 +11,7 @@
 
 # Executando a aplicação local
 
-- Vá até a raíz do projeto e use o comando `make run-db` (você precisará do Docker). Após isso, o container do `MySQL` será iniciado. A partir deste momento você poderá rodar a aplicação normalmente na sua IDE de preferência. Ao iniciar a aplicação pela primeira vez, o banco de dados `request` e todas as tabelas serão criadas automaticamente. Os endpoints estão rodando na `http://localhost:8080`.
+- Vá até a raíz do projeto e use o comando `make run-db` (você precisará do Docker). Após isso, o container do `MySQL` será iniciado. A partir deste momento você poderá rodar a aplicação normalmente na sua `IDE de preferência. Ao iniciar a aplicação pela primeira vez, o banco de dados `request` e todas as tabelas serão criadas automaticamente. Os endpoints estão rodando na `http://localhost:8080`.
 
 # Acessando a área de administrador
 
