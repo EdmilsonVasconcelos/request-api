@@ -1,16 +1,13 @@
 package com.request.api.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.dto.admin.request.AdminDTO;
+import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.dto.admin.response.AdminSavedDTO;
 import com.request.api.exception.AdminExistsException;
 import com.request.api.exception.AdminNotExistException;
 import com.request.api.model.Admin;
 import com.request.api.repository.AdminRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,22 +31,14 @@ public class AdminService {
 	@Autowired
 	private ModelMapper mapper;
 	
-	@Autowired
-	private AdminRepository adminRepository;
+	private final AdminRepository adminRepository;
+
+	public AdminService(AdminRepository adminRepository) {
+		this.adminRepository = adminRepository;
+	}
 	
-	public List<AdminSavedDTO> getAllAdmins() {
-		
-		List<Admin> admins = adminRepository.findAll();
-		
-		List<AdminSavedDTO> response = new ArrayList<>();
-		
-		admins.forEach(admin -> {
-			AdminSavedDTO adminSaved = mapper.map(admin, AdminSavedDTO.class);
-			response.add(adminSaved);
-		});
-		
-		return response;
-		
+	public List<Admin> getAllAdmins() {
+		return adminRepository.findAll();
 	}
 	
 	public AdminSavedDTO saveAdmin(AdminDTO request) {
