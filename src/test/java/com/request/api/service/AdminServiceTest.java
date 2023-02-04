@@ -40,8 +40,6 @@ class AdminServiceTest {
     @Mock
     private AdminRepository adminRepository;
 
-    private Admin admin;
-
     private Admin adminSaved;
 
     private AdminDTO adminDTO;
@@ -144,7 +142,6 @@ class AdminServiceTest {
     }
 
     private void startMocks() {
-        admin = new Admin(null, ADMIN, ADMIN_EMAIL, PASSWORD, null, null, null);
         adminSaved = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
         adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
         changePasswordRequestDTO = new ChangePasswordRequestDTO(PASSWORD);
