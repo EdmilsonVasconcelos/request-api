@@ -10,7 +10,7 @@ stop-app:
 	docker-compose compose down
 
 run-db:
-	docker-compose start mysqldb
+	docker-compose compose up mysqldb
 
 stop-db:
 	docker-compose stop mysqldb
