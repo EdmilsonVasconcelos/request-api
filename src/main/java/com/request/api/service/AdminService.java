@@ -7,8 +7,6 @@ import com.request.api.exception.AdminNotExistException;
 import com.request.api.model.Admin;
 import com.request.api.repository.AdminRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,12 +23,9 @@ public class AdminService {
 	
 	private static final String ADMIN_WITH_EMAIL_EXISTS = "Admin with email %s exists.";
 	
-	private static final String ADMIN_WITH_EMAIL_NOT_EXISTS = "Admin with email %s not exists.";
+	private static final String ADMIN_WITH_EMAIL_DOES_NOT_EXIST = "Admin with email %s does not exist.";
 	
-	private static final String ADMIN_WITH_ID_NOT_EXISTS = "Admin with id %s not exists.";
-	
-	@Autowired
-	private ModelMapper mapper;
+	private static final String ADMIN_WITH_ID_DOES_NOT_EXIST = "Admin with id %s does not exist.";
 	
 	private final AdminRepository adminRepository;
 
@@ -80,7 +75,7 @@ public class AdminService {
 	
 	private Admin getAdminByEmail(String email) {
 		return adminRepository.findByEmail(email)
-				.orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_NOT_EXISTS, email)));
+				.orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_DOES_NOT_EXIST, email)));
 	}
 
 	private void checkAdminExists(String email) {
@@ -95,8 +90,7 @@ public class AdminService {
 		Optional<Admin> admin = adminRepository.findById(idUser);
 		
 		if(admin.isEmpty()) {
-			throw new AdminNotExistException(String.format(ADMIN_WITH_ID_NOT_EXISTS, idUser));
+			throw new AdminNotExistException(String.format(ADMIN_WITH_ID_DOES_NOT_EXIST, idUser));
 		}
 	}
-
 }
