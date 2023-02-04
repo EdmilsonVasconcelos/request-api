@@ -1,6 +1,7 @@
 package com.request.api.controller;
 
 import com.request.api.dto.admin.request.AdminDTO;
+import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.dto.admin.response.AdminSavedDTO;
 import com.request.api.model.Admin;
 import com.request.api.service.AdminService;
@@ -46,6 +47,8 @@ class AdminControllerTest {
 
     private AdminSavedDTO adminSavedDTO;
 
+    private ChangePasswordRequestDTO changePasswordRequestDTO;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -71,7 +74,18 @@ class AdminControllerTest {
     }
 
     @Test
-    void updatePassword() {
+    void changePassword() {
+        when(adminService.changePassword(any())).thenReturn(adminSaved);
+
+        ResponseEntity<AdminSavedDTO> response = adminController.changePassword(changePasswordRequestDTO);
+
+        assertNotNull(response);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(ADMIN, response.getBody().getName());
+
+        assertEquals(ADMIN_EMAIL, response.getBody().getEmail());
     }
 
     @Test
@@ -98,5 +112,6 @@ class AdminControllerTest {
         adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
         adminSaved = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
         adminSavedDTO = new AdminSavedDTO(ID, ADMIN, ADMIN_EMAIL);
+        changePasswordRequestDTO = new ChangePasswordRequestDTO(PASSWORD);
     }
 }
