@@ -1,7 +1,5 @@
 package com.request.api.controller;
 
-import javax.validation.Valid;
-
 import com.request.api.dto.auth.request.AuthRequestDTO;
 import com.request.api.dto.auth.response.TokenDTO;
 import com.request.api.security.TokenService;
@@ -11,8 +9,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @AllArgsConstructor
 @RestController
@@ -24,7 +25,7 @@ public class AuthenticationController {
 	private final TokenService tokenService;
 	
 	@PostMapping
-	public ResponseEntity<TokenDTO> authenticate(@Valid AuthRequestDTO request) {
+	public ResponseEntity<TokenDTO> authenticate(@Valid @RequestBody AuthRequestDTO request) {
 		UsernamePasswordAuthenticationToken dataLogin = request.converter();
 		
 		try {

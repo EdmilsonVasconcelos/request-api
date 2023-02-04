@@ -5,7 +5,6 @@ import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.dto.admin.response.AdminSavedDTO;
 import com.request.api.model.Admin;
 import com.request.api.service.AdminService;
-import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +18,14 @@ import java.util.List;
 import static com.request.api.dto.admin.response.AdminSavedDTO.toListAdminSavedDTO;
 
 @RequestMapping("/v1/admin")
-@AllArgsConstructor
 @RestController
 public class AdminController {
-	
+
 	private final AdminService adminService;
+
+	public AdminController(AdminService adminService) {
+		this.adminService = adminService;
+	}
 	
 	@GetMapping
 	@Cacheable(value = "listAdmins")
