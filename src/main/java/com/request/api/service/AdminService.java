@@ -18,15 +18,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.request.api.model.Admin.toDomain;
+
 @Slf4j
 @Service
 public class AdminService {
 	
-	private static final String ADMIN_WITH_EMAIL_EXIST = "Admin with email %s exist.";
+	private static final String ADMIN_WITH_EMAIL_EXISTS = "Admin with email %s exists.";
 	
-	private static final String ADMIN_WITH_EMAIL_NOT_EXIST = "Admin with email %s not exist.";
+	private static final String ADMIN_WITH_EMAIL_NOT_EXISTS = "Admin with email %s not exists.";
 	
-	private static final String ADMIN_WITH_ID_NOT_EXIST = "Admin with id %s not exist.";
+	private static final String ADMIN_WITH_ID_NOT_EXISTS = "Admin with id %s not exists.";
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -41,18 +43,14 @@ public class AdminService {
 		return adminRepository.findAll();
 	}
 	
-	public AdminSavedDTO saveAdmin(AdminDTO request) {
-		checkExistAdmin(request.getEmail());
+	public Admin saveAdmin(AdminDTO request) {
+		checkAdminExists(request.getEmail());
 		
-		Admin adminToSave = mapper.map(request, Admin.class);
+		Admin adminToSave = toDomain(request);
 		
-		adminToSave.setPassword(new BCryptPasswordEncoder().encode(adminToSave.getPassword().toString()));
-		
-		Admin adminSaved = adminRepository.save(adminToSave);
-		
-		AdminSavedDTO response = mapper.map(adminSaved, AdminSavedDTO.class);
-		
-		return response;
+		adminToSave.setPassword(new BCryptPasswordEncoder().encode(adminToSave.getPassword()));
+
+		return adminRepository.save(adminToSave);
 	}
 	
 	public AdminSavedDTO changePassword(ChangePasswordRequestDTO request) {
@@ -60,7 +58,7 @@ public class AdminService {
 		
 		Admin adminToSave = getAdminByEmail(userLogged);
 		
-		adminToSave.setPassword(new BCryptPasswordEncoder().encode(request.getPassword().toString()));
+		adminToSave.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
 		
 		Admin adminSaved = adminRepository.save(adminToSave);
 		
@@ -80,27 +78,27 @@ public class AdminService {
 	}
 	
 	public void deleteAdmin(Long idAdmin) {
-		checkExistAdmin(idAdmin);
+		checkAdminExists(idAdmin);
 		adminRepository.deleteById(idAdmin);
 	}
 	
 	private Admin getAdminByEmail(String email) {
-		return adminRepository.findByEmail(email).orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_NOT_EXIST, email)));
+		return adminRepository.findByEmail(email).orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_NOT_EXISTS, email)));
 	}
 
-	private void checkExistAdmin(String email) {
+	private void checkAdminExists(String email) {
 		Optional<Admin> admin = adminRepository.findByEmail(email);
 		
 		if(admin.isPresent()) {
-			throw new AdminExistsException(String.format(ADMIN_WITH_EMAIL_EXIST, email));
+			throw new AdminExistsException(String.format(ADMIN_WITH_EMAIL_EXISTS, email));
 		}
 	}
 	
-	private void checkExistAdmin(Long idUser) {
+	private void checkAdminExists(Long idUser) {
 		Optional<Admin> admin = adminRepository.findById(idUser);
 		
 		if(!admin.isPresent()) {
-			throw new AdminNotExistException(String.format(ADMIN_WITH_ID_NOT_EXIST, idUser));
+			throw new AdminNotExistException(String.format(ADMIN_WITH_ID_NOT_EXISTS, idUser));
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.request.api.controller;
 
+import com.request.api.dto.admin.request.AdminDTO;
 import com.request.api.dto.admin.response.AdminSavedDTO;
 import com.request.api.model.Admin;
 import com.request.api.service.AdminService;
@@ -17,10 +18,19 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class AdminControllerTest {
+
+    public static final String ADMIN = "admin";
+
+    public static final String ADMIN_EMAIL = "admin@gmail.com";
+
+    public static final long ID = 1L;
+
+    public static final String PASSWORD = "123123";
 
     @InjectMocks
     private AdminController adminController;
@@ -29,6 +39,10 @@ class AdminControllerTest {
     private AdminService adminService;
 
     private Admin admin;
+
+    private Admin adminSaved;
+
+    private AdminDTO adminDTO;
 
     private AdminSavedDTO adminSavedDTO;
 
@@ -41,17 +55,19 @@ class AdminControllerTest {
 
     @Test
     void getAllAdminsShouldReturnListOfAdmins() {
-        when(adminService.getAllAdmins()).thenReturn(List.of(admin));
+        when(adminService.getAllAdmins()).thenReturn(List.of(adminSaved));
 
         ResponseEntity<List<AdminSavedDTO>> response = adminController.getAllAdmins();
 
         assertNotNull(response);
 
-        assertEquals(ResponseEntity.class, response.getClass());
-
         assertEquals(1, response.getBody().size());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(ADMIN, response.getBody().get(0).getName());
+
+        assertEquals(ADMIN_EMAIL, response.getBody().get(0).getEmail());
     }
 
     @Test
@@ -60,6 +76,17 @@ class AdminControllerTest {
 
     @Test
     void saveAdmin() {
+        when(adminService.saveAdmin(any())).thenReturn(adminSaved);
+
+        ResponseEntity<AdminSavedDTO> response = adminController.saveAdmin(adminDTO);
+
+        assertNotNull(response);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+        assertEquals(ADMIN, response.getBody().getName());
+
+        assertEquals(ADMIN_EMAIL, response.getBody().getEmail());
     }
 
     @Test
@@ -67,7 +94,9 @@ class AdminControllerTest {
     }
 
     private void startAdmin() {
-        admin = new Admin(1L, "admin", "admin@gmail.com", "123123", List.of(), LocalDateTime.now(), LocalDateTime.now());
-        adminSavedDTO = new AdminSavedDTO(1L, "admin", "admin@gmail.com");
+        admin = new Admin(null, ADMIN, ADMIN_EMAIL, PASSWORD, null, null, null);
+        adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
+        adminSaved = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
+        adminSavedDTO = new AdminSavedDTO(ID, ADMIN, ADMIN_EMAIL);
     }
 }

@@ -1,6 +1,8 @@
 package com.request.api.model;
 
+import com.request.api.dto.admin.request.AdminDTO;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -72,5 +75,13 @@ public class Admin implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public static Admin toDomain(AdminDTO adminDTO) {
+		return Admin.builder()
+				.name(adminDTO.getName())
+				.email(adminDTO.getEmail())
+				.password(adminDTO.getPassword())
+				.build();
 	}
 }

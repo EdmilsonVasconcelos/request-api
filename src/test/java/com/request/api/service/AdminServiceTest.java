@@ -1,5 +1,7 @@
 package com.request.api.service;
 
+import com.request.api.dto.admin.request.AdminDTO;
+import com.request.api.exception.AdminExistsException;
 import com.request.api.model.Admin;
 import com.request.api.repository.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,17 +9,26 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class AdminServiceTest {
+
+    public static final String ADMIN = "admin";
+
+    public static final String ADMIN_EMAIL = "admin@gmail.com";
+
+    public static final String PASSWORD = "123123";
+
+    public static final long ID = 1L;
 
     @InjectMocks
     private AdminService adminService;
@@ -25,30 +36,32 @@ class AdminServiceTest {
     @Mock
     private AdminRepository adminRepository;
 
-    @Mock
-    private ModelMapper modelMapper;
-
     private Admin admin;
+
+    private Admin adminSaved;
+
+    private AdminDTO adminDTO;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        adminService = new AdminService(adminRepository);
         startAdmin();
     }
 
     @Test
     void getAllAdminsShouldReturnListOfAdmins() {
-        when(adminRepository.findAll()).thenReturn(List.of(admin));
+        when(adminRepository.findAll()).thenReturn(List.of(adminSaved));
 
         List<Admin> response = adminService.getAllAdmins();
 
         assertNotNull(response);
 
-        assertEquals(1L, response.get(0).getId());
+        assertEquals(ID, response.get(0).getId());
 
-        assertEquals("admin", response.get(0).getName());
+        assertEquals(ADMIN, response.get(0).getName());
 
-        assertEquals("admin@gmail.com", response.get(0).getEmail());
+        assertEquals(ADMIN_EMAIL, response.get(0).getEmail());
     }
 
     @Test
@@ -61,7 +74,31 @@ class AdminServiceTest {
     }
 
     @Test
-    void saveAdmin() {
+    void saveAdminShouldReturnAdminSaved() {
+        when(adminRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        when(adminRepository.save(any())).thenReturn(adminSaved);
+
+        Admin adminSaved = adminService.saveAdmin(adminDTO);
+
+        assertNotNull(adminSaved);
+
+        assertEquals(ADMIN, adminSaved.getName());
+
+        assertEquals(ADMIN_EMAIL, adminSaved.getEmail());
+    }
+
+    @Test
+    void saveAdminShouldReturnExceptionWhenAdminExists() {
+        when(adminRepository.findByEmail(anyString())).thenReturn(Optional.of(adminSaved));
+
+        var exception = assertThrows(AdminExistsException.class, () -> adminService.saveAdmin(adminDTO));
+
+        assertEquals(AdminExistsException.class, exception.getClass());
+
+        assertEquals("Admin with email admin@gmail.com exists.", exception.getMessage());
+
+        verify(adminRepository, times(1)).findByEmail(anyString());
     }
 
     @Test
@@ -73,6 +110,8 @@ class AdminServiceTest {
     }
 
     private void startAdmin() {
-        admin = new Admin(1L, "admin", "admin@gmail.com", "123123", List.of(), LocalDateTime.now(), LocalDateTime.now());
+        admin = new Admin(null, ADMIN, ADMIN_EMAIL, PASSWORD, null, null, null);
+        adminSaved = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
+        adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
     }
 }
