@@ -39,12 +39,10 @@ public class AdminController {
 	@CacheEvict(value = "listAdmins", allEntries = true)
 	public ResponseEntity<AdminSavedDTO> saveAdmin(@Valid @RequestBody AdminDTO request) {
 		Admin admin = adminService.saveAdmin(request);
-
 		AdminSavedDTO adminSavedDTO = AdminSavedDTO.toAdminSavedDTO(admin);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(adminSavedDTO.getId())
 				.toUri();
-
 		return ResponseEntity.created(uri).body(adminSavedDTO);
 	}
 

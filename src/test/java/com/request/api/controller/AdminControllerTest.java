@@ -20,7 +20,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class AdminControllerTest {
@@ -39,13 +40,9 @@ class AdminControllerTest {
     @Mock
     private AdminService adminService;
 
-    private Admin admin;
-
     private Admin adminSaved;
 
     private AdminDTO adminDTO;
-
-    private AdminSavedDTO adminSavedDTO;
 
     private ChangePasswordRequestDTO changePasswordRequestDTO;
 
@@ -105,13 +102,20 @@ class AdminControllerTest {
 
     @Test
     void deleteAdmin() {
+        doNothing().when(adminService).deleteAdmin(anyLong());
+
+        ResponseEntity<AdminSavedDTO> response = adminController.deleteAdmin(ID);
+
+        assertNotNull(response);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+        verify(adminService, times(1)).deleteAdmin(anyLong());
     }
 
     private void startAdmin() {
-        admin = new Admin(null, ADMIN, ADMIN_EMAIL, PASSWORD, null, null, null);
         adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
         adminSaved = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
-        adminSavedDTO = new AdminSavedDTO(ID, ADMIN, ADMIN_EMAIL);
         changePasswordRequestDTO = new ChangePasswordRequestDTO(PASSWORD);
     }
 }
