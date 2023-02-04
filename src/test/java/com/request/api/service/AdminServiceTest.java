@@ -1,6 +1,7 @@
 package com.request.api.service;
 
 import com.request.api.dto.admin.request.AdminDTO;
+import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.exception.AdminExistsException;
 import com.request.api.model.Admin;
 import com.request.api.repository.AdminRepository;
@@ -8,15 +9,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -41,12 +47,14 @@ class AdminServiceTest {
     private Admin adminSaved;
 
     private AdminDTO adminDTO;
+    
+    private ChangePasswordRequestDTO changePasswordRequestDTO;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         adminService = new AdminService(adminRepository);
-        startAdmin();
+        startMocks();
     }
 
     @Test
@@ -102,16 +110,36 @@ class AdminServiceTest {
     }
 
     @Test
-    void changePassword() {
+    void changePasswordShouldUpdateWithSuccess() {
+        Authentication mockAuth = Mockito.mock(Authentication.class);
+        Mockito.when(mockAuth.getPrincipal()).thenReturn(adminSaved);
+
+        SecurityContext mockSecurityContext = Mockito.mock(SecurityContext.class);
+
+        Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuth);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        when(adminRepository.findByEmail(ADMIN_EMAIL)).thenReturn(Optional.of(adminSaved));
+
+        when(adminRepository.save(any())).thenReturn(adminSaved);
+
+        Admin response = adminService.changePassword(changePasswordRequestDTO);
+
+        assertNotNull(response);
+
+        assertEquals(ADMIN, response.getName());
+
+        assertEquals(ADMIN_EMAIL, response.getEmail());
     }
 
     @Test
     void deleteAdmin() {
     }
 
-    private void startAdmin() {
+    private void startMocks() {
         admin = new Admin(null, ADMIN, ADMIN_EMAIL, PASSWORD, null, null, null);
         adminSaved = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
         adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
+        changePasswordRequestDTO = new ChangePasswordRequestDTO(PASSWORD);
     }
 }
