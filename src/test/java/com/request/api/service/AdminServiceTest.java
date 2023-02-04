@@ -123,16 +123,16 @@ class AdminServiceTest {
     }
 
     @Test
-    void changePasswordShouldReturnExceptionWhenAdminLoggedDoesNotExist() {
+    void changePasswordShouldThrowExceptionWhenAdminLoggedDoesNotExist() {
         SecurityUtils.MockAdminLogged(adminSaved);
 
         when(adminRepository.findByEmail(ADMIN_EMAIL)).thenReturn(Optional.empty());
 
-        var exception = assertThrows(AdminNotExistException.class, () -> adminService.changePassword(changePasswordRequestDTO));
+        AdminNotExistException exception = assertThrows(AdminNotExistException.class, () -> adminService.changePassword(changePasswordRequestDTO));
 
         assertEquals(AdminNotExistException.class, exception.getClass());
 
-        assertEquals("Admin with email admin@gmail.com not exists.", exception.getMessage());
+        assertEquals("Admin with email admin@gmail.com does not exist.", exception.getMessage());
 
         verify(adminRepository, times(1)).findByEmail(anyString());
     }
@@ -144,6 +144,19 @@ class AdminServiceTest {
         adminService.deleteAdmin(ID);
 
         verify(adminRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteAdminShouldThrowExceptionWhenAdminLoggedDoesNotExist() {
+        when(adminRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        AdminNotExistException exception = assertThrows(AdminNotExistException.class, () -> adminService.deleteAdmin(ID));
+
+        assertEquals(AdminNotExistException.class, exception.getClass());
+
+        assertEquals("Admin with id 1 does not exist.", exception.getMessage());
+
+        verify(adminRepository, times(1)).findById(anyLong());
     }
 
     private void startMocks() {
