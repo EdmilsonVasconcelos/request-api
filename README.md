@@ -15,12 +15,12 @@
 
 # Acessando a área de administrador
 
-- Crie um usuário usando o endpoint com o verbo `POST`: `http://localhost:8080/v1/admin`
+- Crie um usuário no endpoint `http://localhost:8080/v1/admin` usando o verbo `POST`.
 ```json
 {
   "name": "teste",
   "email": "teste@email.com",
-  "password": "yourpassword"
+  "password": "suasenha"
 }
 ```
 - Acesse http://localhost/request/admin/ no sistema e logue com seu usuário.
