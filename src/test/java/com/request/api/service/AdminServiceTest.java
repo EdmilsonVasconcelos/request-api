@@ -138,7 +138,12 @@ class AdminServiceTest {
     }
 
     @Test
-    void deleteAdmin() {
+    void deleteAdminShouldDeleteWithSuccess() {
+        when(adminRepository.findById(anyLong())).thenReturn(Optional.of(adminSaved));
+
+        adminService.deleteAdmin(ID);
+
+        verify(adminRepository, times(1)).deleteById(anyLong());
     }
 
     private void startMocks() {
