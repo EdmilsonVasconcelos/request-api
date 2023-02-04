@@ -45,12 +45,14 @@ public class AdminController {
 	@PostMapping
 	@CacheEvict(value = "listAdmins", allEntries = true)
 	public ResponseEntity<AdminSavedDTO> saveAdmin(@Valid @RequestBody AdminDTO request) {
-		AdminSavedDTO adminSaved = adminService.saveAdmin(request);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(adminSaved.getId())
+		Admin admin = adminService.saveAdmin(request);
+
+		AdminSavedDTO adminSavedDTO = AdminSavedDTO.toAdminSavedDTO(admin);
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(adminSavedDTO.getId())
 				.toUri();
-		
-		return ResponseEntity.created(uri).body(adminSaved);
+
+		return ResponseEntity.created(uri).body(adminSavedDTO);
 	}
 	
 	@DeleteMapping
