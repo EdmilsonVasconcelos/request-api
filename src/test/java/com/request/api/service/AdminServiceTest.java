@@ -1,6 +1,7 @@
 package com.request.api.service;
 
 import com.request.api.dto.admin.request.AdminDTO;
+import com.request.api.exception.AdminExistsException;
 import com.request.api.model.Admin;
 import com.request.api.repository.AdminRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +15,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class AdminServiceTest {
@@ -87,6 +86,19 @@ class AdminServiceTest {
         assertEquals(ADMIN, adminSaved.getName());
 
         assertEquals(ADMIN_EMAIL, adminSaved.getEmail());
+    }
+
+    @Test
+    void saveAdminShouldReturnExceptionWhenAdminExists() {
+        when(adminRepository.findByEmail(anyString())).thenReturn(Optional.of(adminSaved));
+
+        var exception = assertThrows(AdminExistsException.class, () -> adminService.saveAdmin(adminDTO));
+
+        assertEquals(AdminExistsException.class, exception.getClass());
+
+        assertEquals("Admin with email admin@gmail.com exists.", exception.getMessage());
+
+        verify(adminRepository, times(1)).findByEmail(anyString());
     }
 
     @Test

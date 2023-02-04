@@ -24,11 +24,11 @@ import static com.request.api.model.Admin.toDomain;
 @Service
 public class AdminService {
 	
-	private static final String ADMIN_WITH_EMAIL_EXIST = "Admin with email %s exist.";
+	private static final String ADMIN_WITH_EMAIL_EXISTS = "Admin with email %s exists.";
 	
-	private static final String ADMIN_WITH_EMAIL_NOT_EXIST = "Admin with email %s not exist.";
+	private static final String ADMIN_WITH_EMAIL_NOT_EXISTS = "Admin with email %s not exists.";
 	
-	private static final String ADMIN_WITH_ID_NOT_EXIST = "Admin with id %s not exist.";
+	private static final String ADMIN_WITH_ID_NOT_EXISTS = "Admin with id %s not exists.";
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -44,7 +44,7 @@ public class AdminService {
 	}
 	
 	public Admin saveAdmin(AdminDTO request) {
-		checkExistAdmin(request.getEmail());
+		checkAdminExists(request.getEmail());
 		
 		Admin adminToSave = toDomain(request);
 		
@@ -78,27 +78,27 @@ public class AdminService {
 	}
 	
 	public void deleteAdmin(Long idAdmin) {
-		checkExistAdmin(idAdmin);
+		checkAdminExists(idAdmin);
 		adminRepository.deleteById(idAdmin);
 	}
 	
 	private Admin getAdminByEmail(String email) {
-		return adminRepository.findByEmail(email).orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_NOT_EXIST, email)));
+		return adminRepository.findByEmail(email).orElseThrow(() -> new AdminNotExistException(String.format(ADMIN_WITH_EMAIL_NOT_EXISTS, email)));
 	}
 
-	private void checkExistAdmin(String email) {
+	private void checkAdminExists(String email) {
 		Optional<Admin> admin = adminRepository.findByEmail(email);
 		
 		if(admin.isPresent()) {
-			throw new AdminExistsException(String.format(ADMIN_WITH_EMAIL_EXIST, email));
+			throw new AdminExistsException(String.format(ADMIN_WITH_EMAIL_EXISTS, email));
 		}
 	}
 	
-	private void checkExistAdmin(Long idUser) {
+	private void checkAdminExists(Long idUser) {
 		Optional<Admin> admin = adminRepository.findById(idUser);
 		
 		if(!admin.isPresent()) {
-			throw new AdminNotExistException(String.format(ADMIN_WITH_ID_NOT_EXIST, idUser));
+			throw new AdminNotExistException(String.format(ADMIN_WITH_ID_NOT_EXISTS, idUser));
 		}
 	}
 
