@@ -28,6 +28,8 @@ class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    private Category categoryToSave;
+
     private Category categorySaved;
 
     @BeforeEach
@@ -76,7 +78,19 @@ class CategoryServiceTest {
     }
 
     @Test
-    void upsertCategory() {
+    void upsertCategoryShouldSaveNewCategory() {
+        when(categoryRepository.findByName(anyString())).thenReturn(Optional.empty());
+
+        when(categoryRepository.save(any())).thenReturn(categorySaved);
+
+        Category response = categoryService.upsertCategory(categoryToSave);
+
+        assertNotNull(response);
+
+        assertEquals(ID, response.getId());
+
+        assertEquals(CARROS, response.getName());
+
     }
 
     @Test
@@ -84,6 +98,7 @@ class CategoryServiceTest {
     }
 
     private void startMocks() {
+        categoryToSave = new Category(null, CARROS, null, null);
         categorySaved = new Category(ID, CARROS, LocalDateTime.now(), LocalDateTime.now());
     }
 }

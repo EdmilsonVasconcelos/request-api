@@ -1,6 +1,5 @@
 package com.request.api.service;
 
-import com.request.api.dto.category.request.CategoryRequestDTO;
 import com.request.api.exception.GenericException;
 import com.request.api.model.Category;
 import com.request.api.repository.CategoryRepository;
@@ -25,21 +24,19 @@ public class CategoryService {
                 .orElseThrow(() -> new GenericException("Categoria não existe"));
     }
 
-    public Category upsertCategory(CategoryRequestDTO request) {
-        checkIfItExists(request.getName());
+    public Category upsertCategory(Category category) {
+        checkIfCategoryExists(category.getName());
 
-        Category categoryToSave = Category.toDomain(request);
-
-        return categoryRepository.save(categoryToSave);
+        return categoryRepository.save(category);
     }
 
     public void deleteCategory(Long id) {
-        checkIfItExists(id);
+        checkIfCategoryExists(id);
 
         categoryRepository.deleteById(id);
     }
 
-    private void checkIfItExists(Long id) {
+    private void checkIfCategoryExists(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
 
         if(category.isEmpty()) {
@@ -47,7 +44,7 @@ public class CategoryService {
         }
     }
 
-    private void checkIfItExists(String name) {
+    private void checkIfCategoryExists(String name) {
         Optional<Category> category = categoryRepository.findByName(name);
 
         if(category.isPresent()) {
