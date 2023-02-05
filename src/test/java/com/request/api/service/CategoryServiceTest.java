@@ -10,9 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -48,7 +50,16 @@ class CategoryServiceTest {
     }
 
     @Test
-    void getCategoryById() {
+    void getCategoryByIdShouldReturnCategoryFound() {
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(categorySaved));
+
+        Category response = categoryService.getCategoryById(ID);
+
+        assertNotNull(response);
+
+        assertEquals(ID, response.getId());
+
+        assertEquals(CARROS, response.getName());
     }
 
     @Test
