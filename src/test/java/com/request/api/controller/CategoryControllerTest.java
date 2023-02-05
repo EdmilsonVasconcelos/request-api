@@ -1,5 +1,6 @@
 package com.request.api.controller;
 
+import com.request.api.dto.category.response.CategoryResponseDTO;
 import com.request.api.model.Category;
 import com.request.api.service.CategoryService;
 import com.request.api.service.ProductService;
@@ -8,10 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class CategoryControllerTest {
@@ -46,6 +52,17 @@ class CategoryControllerTest {
 
     @Test
     void getAllCategories() {
+        when(categoryService.getAllCategories()).thenReturn(List.of(category));
+
+        ResponseEntity<List<CategoryResponseDTO>> response = categoryController.getAllCategories();
+
+        assertNotNull(response);
+
+        assertEquals(1, response.getBody().size());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(CARROS, response.getBody().get(0).getName());
     }
 
     @Test
