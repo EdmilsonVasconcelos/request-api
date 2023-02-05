@@ -79,11 +79,9 @@ public class CategoryController {
 
     @PutMapping
     public ResponseEntity<CategoryResponseDTO> updateCategory(@Valid CategoryRequestDTO categoryRequestDTO) {
-//        Category categoryUpdated = categoryService.upsertCategory(categoryRequestDTO);
-//
-//        return ResponseEntity.ok(toCategoryResponseDTO(categoryUpdated));
+        Category categoryUpdated = categoryService.upsertCategory(toDomain(categoryRequestDTO));
 
-        return null;
+        return ResponseEntity.ok(toCategoryResponseDTO(categoryUpdated));
     }
 
     @DeleteMapping("/{id}")
