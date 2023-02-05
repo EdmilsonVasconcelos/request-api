@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static com.request.api.dto.category.response.CategoryResponseDTO.toCategoryResponseDTO;
 import static com.request.api.dto.category.response.CategoryResponseDTO.toList;
+import static com.request.api.model.Category.toDomain;
 
 @AllArgsConstructor
 @RestController
@@ -46,7 +47,7 @@ public class CategoryController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<ProductsByCategoryResponseDTO>> getProductsByCategory() {
+    public ResponseEntity<List<ProductsByCategoryResponseDTO>> getProductsByCategories() {
         Map<String, List<Product>> listProducts = productService.getProductsByCategories();
 
         List<ProductsByCategoryResponseDTO> productsByCategory = listProducts.entrySet()
@@ -61,14 +62,14 @@ public class CategoryController {
     }
 
     @GetMapping("/productsByCategory")
-    public ResponseEntity<List<ProductResponseDTO>> getProductsByCategory(@RequestParam Long categoryId) {
+    public ResponseEntity<List<ProductResponseDTO>> getProductsByCategoryId(@RequestParam Long categoryId) {
         List<Product> products = productService.getProductsByCategoryId(categoryId);
         return ResponseEntity.ok(ProductResponseDTO.toList(products));
     }
 
     @PostMapping
     public ResponseEntity<CategoryResponseDTO> saveCategory(@Valid CategoryRequestDTO categoryRequestDTO) {
-        Category categorySaved = categoryService.upsertCategory(categoryRequestDTO);
+        Category categorySaved = categoryService.upsertCategory(toDomain(categoryRequestDTO));
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categorySaved.getId())
                 .toUri();
@@ -78,9 +79,11 @@ public class CategoryController {
 
     @PutMapping
     public ResponseEntity<CategoryResponseDTO> updateCategory(@Valid CategoryRequestDTO categoryRequestDTO) {
-        Category categoryUpdated = categoryService.upsertCategory(categoryRequestDTO);
+//        Category categoryUpdated = categoryService.upsertCategory(categoryRequestDTO);
+//
+//        return ResponseEntity.ok(toCategoryResponseDTO(categoryUpdated));
 
-        return ResponseEntity.ok(toCategoryResponseDTO(categoryUpdated));
+        return null;
     }
 
     @DeleteMapping("/{id}")
