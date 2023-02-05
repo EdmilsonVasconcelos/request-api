@@ -163,6 +163,17 @@ class CategoryControllerTest {
 
     @Test
     void updateCategory() {
+        when(categoryService.upsertCategory(any())).thenReturn(category);
+
+        ResponseEntity<CategoryResponseDTO> response = categoryController.saveCategory(new CategoryRequestDTO(1L, CARROS));
+
+        assertNotNull(response);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+        assertEquals(ID, response.getBody().getId());
+
+        assertEquals(CARROS, response.getBody().getName());
     }
 
     @Test
