@@ -23,7 +23,7 @@
   "password": "suasenha"
 }
 ```
-- Acesse http://localhost/request/admin/ no sistema e logue com seu usuário.
+- Acesse http://localhost/request/admin/ no sistema e logue com seu usuário (Você precisa do front-end configurado).
 
 # Configurando um gerenciador de banco de dados
 
