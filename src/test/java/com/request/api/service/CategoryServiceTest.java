@@ -1,5 +1,6 @@
 package com.request.api.service;
 
+import com.request.api.exception.GenericException;
 import com.request.api.model.Category;
 import com.request.api.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,10 +13,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class CategoryServiceTest {
@@ -60,6 +60,19 @@ class CategoryServiceTest {
         assertEquals(ID, response.getId());
 
         assertEquals(CARROS, response.getName());
+    }
+
+    @Test
+    void getCategoryByIdShouldReturnExceptionWhenCategoryDoesNotExist() {
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(GenericException.class, () -> categoryService.getCategoryById(ID));
+
+        assertEquals(GenericException.class, exception.getClass());
+
+        assertEquals("Categoria não existe", exception.getMessage());
+
+        verify(categoryRepository, times(1)).findById(anyLong());
     }
 
     @Test
