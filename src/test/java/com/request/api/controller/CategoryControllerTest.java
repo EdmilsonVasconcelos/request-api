@@ -1,6 +1,7 @@
 package com.request.api.controller;
 
 import com.request.api.dto.category.response.CategoryResponseDTO;
+import com.request.api.dto.product.response.ProductResponseDTO;
 import com.request.api.dto.product.response.ProductsByCategoryResponseDTO;
 import com.request.api.model.Category;
 import com.request.api.model.Product;
@@ -82,14 +83,14 @@ class CategoryControllerTest {
     }
 
     @Test
-    void getProductsByCategory() {
+    void getProductsByCategories() {
         Map<String, List<Product>> productsByCategory = new HashMap<>();
 
         productsByCategory.put(category.getName(), List.of(product));
 
         when(productService.getProductsByCategories()).thenReturn(productsByCategory);
 
-        ResponseEntity<List<ProductsByCategoryResponseDTO>> response = categoryController.getProductsByCategory();
+        ResponseEntity<List<ProductsByCategoryResponseDTO>> response = categoryController.getProductsByCategories();
 
         assertNotNull(response);
 
@@ -113,7 +114,32 @@ class CategoryControllerTest {
     }
 
     @Test
-    void testGetProductsByCategory() {
+    void getProductsByCategoryId() {
+        when(productService.getProductsByCategoryId(anyLong())).thenReturn(List.of(product));
+
+        ResponseEntity<List<ProductResponseDTO>> response = categoryController.getProductsByCategoryId(ID);
+
+        assertNotNull(response);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(CARROS, response.getBody().get(0).getCategory().getName());
+
+        assertEquals(ID, response.getBody().get(0).getCategory().getId());
+
+        assertEquals(ONIX, response.getBody().get(0).getName());
+
+        assertTrue(response.getBody().get(0).isAvailable());
+
+        assertEquals(10.0, response.getBody().get(0).getPrice());
+
+        assertEquals(12.5, response.getBody().get(0).getPriceCredit());
+
+        assertEquals(10.0, response.getBody().get(0).getPriceDebit());
+
+        assertEquals(ID, response.getBody().get(0).getId());
+
+        assertEquals(DESCRIPTION, response.getBody().get(0).getDescription());
     }
 
     @Test
