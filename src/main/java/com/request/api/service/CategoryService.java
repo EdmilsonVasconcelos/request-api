@@ -25,18 +25,18 @@ public class CategoryService {
     }
 
     public Category upsertCategory(Category category) {
-        checkIfCategoryExists(category.getName());
+        existingCategory(category.getName());
 
         return categoryRepository.save(category);
     }
 
     public void deleteCategory(Long id) {
-        checkIfCategoryExists(id);
+        existingCategory(id);
 
         categoryRepository.deleteById(id);
     }
 
-    private void checkIfCategoryExists(Long id) {
+    private void existingCategory(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
 
         if(category.isEmpty()) {
@@ -44,7 +44,7 @@ public class CategoryService {
         }
     }
 
-    private void checkIfCategoryExists(String name) {
+    private void existingCategory(String name) {
         Optional<Category> category = categoryRepository.findByName(name);
 
         if(category.isPresent()) {

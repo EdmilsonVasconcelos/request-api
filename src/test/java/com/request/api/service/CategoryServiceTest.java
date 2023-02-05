@@ -30,7 +30,7 @@ class CategoryServiceTest {
 
     private Category categoryToSave;
 
-    private Category categorySaved;
+    private Category category;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +40,7 @@ class CategoryServiceTest {
 
     @Test
     void getAllCategoriesShouldReturnListWithSuccess() {
-        when(categoryRepository.findAll()).thenReturn(List.of(categorySaved));
+        when(categoryRepository.findAll()).thenReturn(List.of(category));
 
         List<Category> response = categoryService.getAllCategories();
 
@@ -53,7 +53,7 @@ class CategoryServiceTest {
 
     @Test
     void getCategoryByIdShouldReturnCategoryFound() {
-        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(categorySaved));
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
         Category response = categoryService.getCategoryById(ID);
 
@@ -81,9 +81,25 @@ class CategoryServiceTest {
     void upsertCategoryShouldSaveNewCategory() {
         when(categoryRepository.findByName(anyString())).thenReturn(Optional.empty());
 
-        when(categoryRepository.save(any())).thenReturn(categorySaved);
+        when(categoryRepository.save(any())).thenReturn(category);
 
         Category response = categoryService.upsertCategory(categoryToSave);
+
+        assertNotNull(response);
+
+        assertEquals(ID, response.getId());
+
+        assertEquals(CARROS, response.getName());
+
+    }
+
+    @Test
+    void upsertCategoryShouldUpdateCategory() {
+        when(categoryRepository.findByName(anyString())).thenReturn(Optional.empty());
+
+        when(categoryRepository.save(any())).thenReturn(category);
+
+        Category response = categoryService.upsertCategory(category);
 
         assertNotNull(response);
 
@@ -99,6 +115,6 @@ class CategoryServiceTest {
 
     private void startMocks() {
         categoryToSave = new Category(null, CARROS, null, null);
-        categorySaved = new Category(ID, CARROS, LocalDateTime.now(), LocalDateTime.now());
+        category = new Category(ID, CARROS, LocalDateTime.now(), LocalDateTime.now());
     }
 }
