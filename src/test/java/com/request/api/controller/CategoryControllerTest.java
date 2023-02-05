@@ -24,7 +24,8 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 class CategoryControllerTest {
@@ -178,6 +179,15 @@ class CategoryControllerTest {
 
     @Test
     void deleteCategory() {
+        doNothing().when(categoryService).deleteCategory(anyLong());
+
+        ResponseEntity<Void> response = categoryController.deleteCategory(ID);
+
+        assertNotNull(response);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+        verify(categoryService, times(1)).deleteCategory(anyLong());
     }
 
     private void startMocks() {
