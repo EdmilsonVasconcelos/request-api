@@ -21,7 +21,13 @@ import static org.mockito.Mockito.*;
 class CategoryServiceTest {
 
     public static final long ID = 1L;
+
     public static final String CARROS = "Carros";
+
+    public static final String CATEGORIA_EXISTE = "Categoria existe";
+
+    public static final String CATEGORIA_NÃO_EXISTE = "Categoria não existe";
+
     @InjectMocks
     private CategoryService categoryService;
 
@@ -72,7 +78,7 @@ class CategoryServiceTest {
 
         assertEquals(GenericException.class, exception.getClass());
 
-        assertEquals("Categoria não existe", exception.getMessage());
+        assertEquals(CATEGORIA_NÃO_EXISTE, exception.getMessage());
 
         verify(categoryRepository, times(1)).findById(anyLong());
     }
@@ -110,7 +116,38 @@ class CategoryServiceTest {
     }
 
     @Test
-    void deleteCategory() {
+    void upsertCategoryShouldReturnExceptionWhenCategoryAlreadyExists() {
+        when(categoryRepository.findByName(anyString())).thenReturn(Optional.of(category));
+
+        Exception exception = assertThrows(GenericException.class, () -> categoryService.upsertCategory(category));
+
+        assertEquals(GenericException.class, exception.getClass());
+
+        assertEquals(CATEGORIA_EXISTE, exception.getMessage());
+
+        verify(categoryRepository, times(1)).findByName(anyString());
+    }
+
+    @Test
+    void deleteCategoryShouldDeleteWithSuccess() {
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+
+        categoryService.deleteCategory(ID);
+
+        verify(categoryRepository, times(1)).deleteById(ID);
+    }
+
+    @Test
+    void deleteCategoryShouldReturnExceptionWhenCategoryDoesNotExist() {
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(GenericException.class, () -> categoryService.deleteCategory(ID));
+
+        assertEquals(GenericException.class, exception.getClass());
+
+        assertEquals(CATEGORIA_NÃO_EXISTE, exception.getMessage());
+
+        verify(categoryRepository, times(1)).findById(anyLong());
     }
 
     private void startMocks() {
