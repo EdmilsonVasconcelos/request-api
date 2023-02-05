@@ -1,5 +1,6 @@
 package com.request.api.controller;
 
+import com.request.api.dto.category.request.CategoryRequestDTO;
 import com.request.api.dto.category.response.CategoryResponseDTO;
 import com.request.api.dto.product.response.ProductResponseDTO;
 import com.request.api.dto.product.response.ProductsByCategoryResponseDTO;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -45,6 +47,8 @@ class CategoryControllerTest {
     private ProductService productService;
 
     private Category category;
+
+    private CategoryRequestDTO categoryRequestDTO;
 
     private Product product;
 
@@ -144,6 +148,17 @@ class CategoryControllerTest {
 
     @Test
     void saveCategory() {
+        when(categoryService.upsertCategory(any())).thenReturn(category);
+
+        ResponseEntity<CategoryResponseDTO> response = categoryController.saveCategory(categoryRequestDTO);
+
+        assertNotNull(response);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+        assertEquals(ID, response.getBody().getId());
+
+        assertEquals(CARROS, response.getBody().getName());
     }
 
     @Test
@@ -156,6 +171,7 @@ class CategoryControllerTest {
 
     private void startMocks() {
         category = new Category(ID, CARROS, LocalDateTime.now(), LocalDateTime.now());
+        categoryRequestDTO = new CategoryRequestDTO(null, CARROS);
         product = Product.builder()
                 .id(ID)
                 .name(ONIX)

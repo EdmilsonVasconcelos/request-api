@@ -69,19 +69,19 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryResponseDTO> saveCategory(@Valid CategoryRequestDTO categoryRequestDTO) {
-        Category categorySaved = categoryService.upsertCategory(toDomain(categoryRequestDTO));
+        Category category = categoryService.upsertCategory(toDomain(categoryRequestDTO));
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categorySaved.getId())
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(toCategoryResponseDTO(categorySaved));
+        return ResponseEntity.created(uri).body(toCategoryResponseDTO(category));
     }
 
     @PutMapping
     public ResponseEntity<CategoryResponseDTO> updateCategory(@Valid CategoryRequestDTO categoryRequestDTO) {
-        Category categoryUpdated = categoryService.upsertCategory(toDomain(categoryRequestDTO));
+        Category category = categoryService.upsertCategory(toDomain(categoryRequestDTO));
 
-        return ResponseEntity.ok(toCategoryResponseDTO(categoryUpdated));
+        return ResponseEntity.ok(toCategoryResponseDTO(category));
     }
 
     @DeleteMapping("/{id}")
