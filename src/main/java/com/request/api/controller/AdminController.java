@@ -50,7 +50,8 @@ public class AdminController {
 	@PutMapping(value = "/change-password")
 	@CacheEvict(value = "listAdmins", allEntries = true)
 	public ResponseEntity<AdminSavedDTO> changePassword(@Valid @RequestBody ChangePasswordRequestDTO request) {
-		Admin admin = adminService.changePassword(request);
+		Admin admin = adminService.changePassword(request.getPassword());
+
 		return ResponseEntity.ok(toAdminSavedDTO(admin));
 	}
 	

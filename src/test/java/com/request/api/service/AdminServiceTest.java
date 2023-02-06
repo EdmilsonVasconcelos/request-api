@@ -1,7 +1,5 @@
 package com.request.api.service;
 
-import com.request.api.dto.admin.request.AdminDTO;
-import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.exception.AdminExistsException;
 import com.request.api.exception.AdminNotExistException;
 import com.request.api.model.Admin;
@@ -13,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,10 +42,6 @@ class AdminServiceTest {
     private Admin admin;
 
     private Admin adminToSave;
-
-    private AdminDTO adminDTO;
-    
-    private ChangePasswordRequestDTO changePasswordRequestDTO;
 
     @BeforeEach
     void setUp() {
@@ -85,13 +80,13 @@ class AdminServiceTest {
 
         when(adminRepository.save(any())).thenReturn(admin);
 
-        Admin adminSaved = adminService.saveAdmin(adminToSave);
+        Admin response = adminService.saveAdmin(adminToSave);
 
-        assertNotNull(adminSaved);
+        assertNotNull(response);
 
-        assertEquals(ADMIN, adminSaved.getName());
+        assertEquals(ADMIN, response.getName());
 
-        assertEquals(ADMIN_EMAIL, adminSaved.getEmail());
+        assertEquals(ADMIN_EMAIL, response.getEmail());
     }
 
     @Test
@@ -109,19 +104,23 @@ class AdminServiceTest {
 
     @Test
     void changePasswordShouldUpdateWithSuccess() {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         SecurityUtils.MockAdminLogged(admin);
 
         when(adminRepository.findByEmail(ADMIN_EMAIL)).thenReturn(Optional.of(admin));
 
         when(adminRepository.save(any())).thenReturn(admin);
 
-        Admin response = adminService.changePassword(changePasswordRequestDTO);
+        Admin response = adminService.changePassword(PASSWORD);
 
         assertNotNull(response);
 
         assertEquals(ADMIN, response.getName());
 
         assertEquals(ADMIN_EMAIL, response.getEmail());
+
+        assertTrue(passwordEncoder.matches(PASSWORD, response.getPassword()));
     }
 
     @Test
@@ -130,7 +129,7 @@ class AdminServiceTest {
 
         when(adminRepository.findByEmail(ADMIN_EMAIL)).thenReturn(Optional.empty());
 
-        AdminNotExistException exception = assertThrows(AdminNotExistException.class, () -> adminService.changePassword(changePasswordRequestDTO));
+        AdminNotExistException exception = assertThrows(AdminNotExistException.class, () -> adminService.changePassword(PASSWORD));
 
         assertEquals(AdminNotExistException.class, exception.getClass());
 
@@ -164,7 +163,5 @@ class AdminServiceTest {
     private void startMocks() {
         admin = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
         adminToSave = new Admin(null, ADMIN, ADMIN_EMAIL, PASSWORD, null, null, null);
-        adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
-        changePasswordRequestDTO = new ChangePasswordRequestDTO(PASSWORD);
     }
 }

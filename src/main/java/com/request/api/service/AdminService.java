@@ -1,6 +1,5 @@
 package com.request.api.service;
 
-import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.exception.AdminExistsException;
 import com.request.api.exception.AdminNotExistException;
 import com.request.api.model.Admin;
@@ -42,12 +41,12 @@ public class AdminService {
 		return adminRepository.save(admin);
 	}
 	
-	public Admin changePassword(ChangePasswordRequestDTO request) {
+	public Admin changePassword(String password) {
 		String userLogged = getEmailAdminLogged();
 		
 		Admin adminToSave = getAdminByEmail(userLogged);
 		
-		adminToSave.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
+		adminToSave.setPassword(new BCryptPasswordEncoder().encode(password));
 		
 		return adminRepository.save(adminToSave);
 	}
