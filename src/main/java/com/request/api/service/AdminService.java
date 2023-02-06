@@ -1,6 +1,5 @@
 package com.request.api.service;
 
-import com.request.api.dto.admin.request.AdminDTO;
 import com.request.api.dto.admin.request.ChangePasswordRequestDTO;
 import com.request.api.exception.AdminExistsException;
 import com.request.api.exception.AdminNotExistException;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.request.api.model.Admin.toDomain;
 
 @Slf4j
 @Service
@@ -37,14 +34,12 @@ public class AdminService {
 		return adminRepository.findAll();
 	}
 	
-	public Admin saveAdmin(AdminDTO request) {
-		checkAdminExists(request.getEmail());
-		
-		Admin adminToSave = toDomain(request);
-		
-		adminToSave.setPassword(new BCryptPasswordEncoder().encode(adminToSave.getPassword()));
+	public Admin saveAdmin(Admin admin) {
+		checkAdminExists(admin.getEmail());
 
-		return adminRepository.save(adminToSave);
+		admin.setPassword(new BCryptPasswordEncoder().encode(admin.getPassword()));
+
+		return adminRepository.save(admin);
 	}
 	
 	public Admin changePassword(ChangePasswordRequestDTO request) {

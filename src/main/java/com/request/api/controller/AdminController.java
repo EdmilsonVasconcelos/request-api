@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.request.api.dto.admin.response.AdminSavedDTO.toAdminSavedDTO;
 import static com.request.api.dto.admin.response.AdminSavedDTO.toListAdminSavedDTO;
+import static com.request.api.model.Admin.toDomain;
 
 @RequestMapping("/v1/admin")
 @RestController
@@ -38,12 +39,12 @@ public class AdminController {
 	@PostMapping
 	@CacheEvict(value = "listAdmins", allEntries = true)
 	public ResponseEntity<AdminSavedDTO> saveAdmin(@Valid @RequestBody AdminDTO request) {
-		Admin admin = adminService.saveAdmin(request);
-		AdminSavedDTO adminSavedDTO = AdminSavedDTO.toAdminSavedDTO(admin);
+		Admin admin = adminService.saveAdmin(toDomain(request));
 
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(adminSavedDTO.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(admin.getId())
 				.toUri();
-		return ResponseEntity.created(uri).body(adminSavedDTO);
+
+		return ResponseEntity.created(uri).body(toAdminSavedDTO(admin));
 	}
 
 	@PutMapping(value = "/change-password")

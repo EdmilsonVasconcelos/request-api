@@ -40,7 +40,9 @@ class AdminServiceTest {
     @Mock
     private AdminRepository adminRepository;
 
-    private Admin adminSaved;
+    private Admin admin;
+
+    private Admin adminToSave;
 
     private AdminDTO adminDTO;
     
@@ -55,7 +57,7 @@ class AdminServiceTest {
 
     @Test
     void getAllAdminsShouldReturnListOfAdmins() {
-        when(adminRepository.findAll()).thenReturn(List.of(adminSaved));
+        when(adminRepository.findAll()).thenReturn(List.of(admin));
 
         List<Admin> response = adminService.getAllAdmins();
 
@@ -81,9 +83,9 @@ class AdminServiceTest {
     void saveAdminShouldReturnAdminSaved() {
         when(adminRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-        when(adminRepository.save(any())).thenReturn(adminSaved);
+        when(adminRepository.save(any())).thenReturn(admin);
 
-        Admin adminSaved = adminService.saveAdmin(adminDTO);
+        Admin adminSaved = adminService.saveAdmin(adminToSave);
 
         assertNotNull(adminSaved);
 
@@ -94,9 +96,9 @@ class AdminServiceTest {
 
     @Test
     void saveAdminShouldReturnExceptionWhenAdminExists() {
-        when(adminRepository.findByEmail(anyString())).thenReturn(Optional.of(adminSaved));
+        when(adminRepository.findByEmail(anyString())).thenReturn(Optional.of(admin));
 
-        var exception = assertThrows(AdminExistsException.class, () -> adminService.saveAdmin(adminDTO));
+        var exception = assertThrows(AdminExistsException.class, () -> adminService.saveAdmin(adminToSave));
 
         assertEquals(AdminExistsException.class, exception.getClass());
 
@@ -107,11 +109,11 @@ class AdminServiceTest {
 
     @Test
     void changePasswordShouldUpdateWithSuccess() {
-        SecurityUtils.MockAdminLogged(adminSaved);
+        SecurityUtils.MockAdminLogged(admin);
 
-        when(adminRepository.findByEmail(ADMIN_EMAIL)).thenReturn(Optional.of(adminSaved));
+        when(adminRepository.findByEmail(ADMIN_EMAIL)).thenReturn(Optional.of(admin));
 
-        when(adminRepository.save(any())).thenReturn(adminSaved);
+        when(adminRepository.save(any())).thenReturn(admin);
 
         Admin response = adminService.changePassword(changePasswordRequestDTO);
 
@@ -124,7 +126,7 @@ class AdminServiceTest {
 
     @Test
     void changePasswordShouldThrowExceptionWhenAdminLoggedDoesNotExist() {
-        SecurityUtils.MockAdminLogged(adminSaved);
+        SecurityUtils.MockAdminLogged(admin);
 
         when(adminRepository.findByEmail(ADMIN_EMAIL)).thenReturn(Optional.empty());
 
@@ -139,7 +141,7 @@ class AdminServiceTest {
 
     @Test
     void deleteAdminShouldDeleteWithSuccess() {
-        when(adminRepository.findById(anyLong())).thenReturn(Optional.of(adminSaved));
+        when(adminRepository.findById(anyLong())).thenReturn(Optional.of(admin));
 
         adminService.deleteAdmin(ID);
 
@@ -160,7 +162,8 @@ class AdminServiceTest {
     }
 
     private void startMocks() {
-        adminSaved = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
+        admin = new Admin(ID, ADMIN, ADMIN_EMAIL, PASSWORD, List.of(), LocalDateTime.now(), LocalDateTime.now());
+        adminToSave = new Admin(null, ADMIN, ADMIN_EMAIL, PASSWORD, null, null, null);
         adminDTO = new AdminDTO(ADMIN, ADMIN_EMAIL, PASSWORD);
         changePasswordRequestDTO = new ChangePasswordRequestDTO(PASSWORD);
     }
