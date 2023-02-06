@@ -55,10 +55,10 @@ public class AdminController {
 		return ResponseEntity.ok(toAdminSavedDTO(admin));
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/{id}")
 	@CacheEvict(value = "listAdmins", allEntries = true)
-	public ResponseEntity<AdminSavedDTO> deleteAdmin(@RequestParam Long idAdmin) {
-		adminService.deleteAdmin(idAdmin);
+	public ResponseEntity<AdminSavedDTO> deleteAdmin(@PathVariable Long id) {
+		adminService.deleteAdmin(id);
 		return ResponseEntity.noContent().build();
 	} 
 }
