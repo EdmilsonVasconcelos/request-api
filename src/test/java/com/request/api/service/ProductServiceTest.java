@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,6 +64,8 @@ class ProductServiceTest {
 
         assertEquals(NAME_CAR, response.getName());
 
+        assertEquals(Boolean.TRUE, response.getAvailable());
+
         assertEquals(10.0, response.getPrice());
 
         assertEquals(12.5, response.getPriceCredit());
@@ -88,6 +92,25 @@ class ProductServiceTest {
 
     @Test
     void getProductsByCategories() {
+        when(categoryService.getAllCategories()).thenReturn(List.of(category));
+
+        when(productRepository.findByCategory(any())).thenReturn(List.of(product));
+
+        Map<String, List<Product>> response = productService.getProductsByCategories();
+
+        assertNotNull(response);
+
+        assertFalse(response.isEmpty());
+
+        assertEquals(response.entrySet().size(), 1);
+
+        response.forEach((k, v) -> {
+            assertEquals(CARROS, k);
+
+            assertEquals(1, v.size());
+
+            assertEquals(1L, v.get(0).getId());
+        });
     }
 
     @Test
@@ -124,8 +147,14 @@ class ProductServiceTest {
     }
 
     private Product buildProduct() {
-        Product product = buildProductToSave();
-        product.setId(1L);
-        return product;
+        return Product.builder()
+                .id(1L)
+                .available(Boolean.TRUE)
+                .category(category)
+                .name(NAME_CAR)
+                .price(10.0)
+                .priceCredit(12.5)
+                .priceDebit(10.0)
+                .build();
     }
 }
