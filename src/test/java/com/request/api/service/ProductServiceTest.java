@@ -56,7 +56,7 @@ class ProductServiceTest {
 
         when(productRepository.save(any())).thenReturn(product);
 
-        Product response = productService.upsertProduct(productToSave);
+        Product response = productService.upsertProduct(productToSave, ID);
 
         assertNotNull(response);
 
@@ -81,7 +81,7 @@ class ProductServiceTest {
     void upsertProductShouldReturnExceptionWhenIdIsNullAndNameOfProductAlreadyExist() {
         when(productRepository.findByName(any())).thenReturn(Optional.of(product));
 
-        Exception exception = assertThrows(ProductExistsException.class, () -> productService.upsertProduct(productToSave));
+        Exception exception = assertThrows(ProductExistsException.class, () -> productService.upsertProduct(productToSave, ID));
 
         assertEquals(ProductExistsException.class, exception.getClass());
 
