@@ -1,20 +1,18 @@
 package com.request.api.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import com.request.api.dto.product.request.ProductRequestDTO;
 import com.request.api.exception.ProductExistsException;
 import com.request.api.exception.ProductNotExistsException;
 import com.request.api.model.Category;
 import com.request.api.model.Product;
 import com.request.api.repository.ProductRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,22 +27,17 @@ public class ProductService {
 
 	private final CategoryService categoryService;
 
-	public Product upsertProduct(ProductRequestDTO request) {
-		if(request.getId() == null){
-			checkIfExistsProduct(request.getName());
+	public Product upsertProduct(Product product) {
+		if (product.getId() == null) {
+			existingProduct(product.getName());
+			product.setAvailable(Boolean.FALSE);
 		}
 
-		Category category = categoryService.getCategoryById(request.getCategoryId());
+		Category category = categoryService.getCategoryById(product.getCategory().getId());
 
-		Product productToSave = Product.toDomain(request);
+		product.setCategory(category);
 
-		productToSave.setCategory(category);
-
-		if (request.getId() == null) {
-			productToSave.setAvailable(Boolean.FALSE);
-		}
-
-		return productRepository.save(productToSave);
+		return productRepository.save(product);
 	}
 
 	public Map<String, List<Product>> getProductsByCategories() {
@@ -63,19 +56,19 @@ public class ProductService {
 	}
 	
 	public void deleteProduct(Long idProduct) {
-		checkIfExistsProduc(idProduct);
+		existingProduct(idProduct);
 
 		productRepository.deleteById(idProduct);
 	}
 
 	public Product getProductById(Long id) {
-		checkIfExistsProduc(id);
+		existingProduct(id);
 
 		return productRepository.getById(id);
 
 	}
 
-	private void checkIfExistsProduct(String nameProduct) {
+	private void existingProduct(String nameProduct) {
 		Optional<Product> product = productRepository.findByName(nameProduct);
 		
 		if(product.isPresent()) {
@@ -83,7 +76,7 @@ public class ProductService {
 		}
 	}
 	
-	private void checkIfExistsProduc(Long id) {
+	private void existingProduct(Long id) {
 		Optional<Product> product = productRepository.findById(id);
 		
 		if(product.isEmpty()) {
