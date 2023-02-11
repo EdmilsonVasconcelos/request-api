@@ -68,7 +68,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDTO> saveCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+    public ResponseEntity<CategoryResponseDTO> saveCategory(@Valid CategoryRequestDTO categoryRequestDTO) {
         Category category = categoryService.upsertCategory(toDomain(categoryRequestDTO));
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId())
@@ -78,7 +78,7 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<CategoryResponseDTO> updateCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@Valid CategoryRequestDTO categoryRequestDTO) {
         Category category = categoryService.upsertCategory(toDomain(categoryRequestDTO));
 
         return ResponseEntity.ok(toCategoryResponseDTO(category));
