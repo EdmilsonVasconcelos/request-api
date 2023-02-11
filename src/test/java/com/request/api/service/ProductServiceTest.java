@@ -168,6 +168,28 @@ class ProductServiceTest {
 
     @Test
     void getProductById() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+
+        when(productRepository.getById(anyLong())).thenReturn(product);
+
+        Product response = productService.getProductById(ID);
+
+        assertNotNull(response);
+
+        assertEquals(ID, response.getId());
+    }
+
+    @Test
+    void getProductByIdShouldReturnExceptionWhenProductDoesNotExist() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        ProductNotExistsException exception = assertThrows(ProductNotExistsException.class, () -> productService.getProductById(ID));
+
+        assertEquals(ProductNotExistsException.class, exception.getClass());
+
+        assertEquals("Produto com id 1 nao existe", exception.getMessage());
+
+        verify(productRepository, times(1)).findById(anyLong());
     }
 
     private void initializeMocks() {
