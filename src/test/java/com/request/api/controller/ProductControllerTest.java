@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -59,6 +60,15 @@ class ProductControllerTest {
 
     @Test
     void getProductById() {
+        when(productService.getProductById(anyLong())).thenReturn(product);
+
+        ResponseEntity<ProductResponseDTO> response = productController.getProductById(ID);
+
+        assertNotNull(response);
+
+        assertEquals(ID, response.getBody().getId());
+
+        assertEquals(ONIX, response.getBody().getName());
     }
 
     @Test
