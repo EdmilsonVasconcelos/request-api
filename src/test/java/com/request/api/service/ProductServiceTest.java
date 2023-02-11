@@ -115,6 +115,17 @@ class ProductServiceTest {
 
     @Test
     void getProductsByCategoryId() {
+        when(categoryService.getCategoryById(anyLong())).thenReturn(category);
+
+        when(productRepository.findByCategory(any())).thenReturn(List.of(product));
+
+        List<Product> response = productService.getProductsByCategoryId(ID);
+
+        assertNotNull(response);
+
+        assertEquals(1, response.size());
+
+        assertEquals(NAME_CAR, response.get(0).getName());
     }
 
     @Test
