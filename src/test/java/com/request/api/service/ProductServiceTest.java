@@ -1,6 +1,7 @@
 package com.request.api.service;
 
 import com.request.api.exception.ProductExistsException;
+import com.request.api.exception.ProductNotExistsException;
 import com.request.api.model.Category;
 import com.request.api.model.Product;
 import com.request.api.repository.ProductRepository;
@@ -150,6 +151,19 @@ class ProductServiceTest {
         productService.deleteProduct(ID);
 
         verify(productRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    void deleteProductShouldReturnExceptionWhenProductDoesNotExist() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        ProductNotExistsException exception = assertThrows(ProductNotExistsException.class, () -> productService.deleteProduct(ID));
+
+        assertEquals(ProductNotExistsException.class, exception.getClass());
+
+        assertEquals("Produto com id 1 nao existe", exception.getMessage());
+
+        verify(productRepository, times(1)).findById(anyLong());
     }
 
     @Test
