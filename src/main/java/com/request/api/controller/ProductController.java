@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.request.api.dto.product.response.ProductResponseDTO.toList;
 import static com.request.api.dto.product.response.ProductResponseDTO.toProductResponseDTO;
+import static com.request.api.model.Product.toDomain;
 
 @AllArgsConstructor
 @RestController
@@ -36,8 +37,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> saveProduct(@Valid ProductRequestDTO request) {
-        Product productSaved = productService.upsertProduct(request);
+    public ResponseEntity<ProductResponseDTO> saveProduct(@Valid @RequestBody ProductRequestDTO request) {
+        Product productSaved = productService.upsertProduct(toDomain(request));
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productSaved.getId())
                 .toUri();
@@ -46,8 +47,9 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity<ProductResponseDTO> updateProduct(@Valid ProductRequestDTO request) {
-        Product productUpdated = productService.upsertProduct(request);
+    public ResponseEntity<ProductResponseDTO> updateProduct(@Valid @RequestBody ProductRequestDTO request) {
+        Product productUpdated = productService.upsertProduct(toDomain(request));
+
         return ResponseEntity.ok(toProductResponseDTO(productUpdated));
     }
 
