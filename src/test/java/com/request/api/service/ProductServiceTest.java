@@ -130,10 +130,22 @@ class ProductServiceTest {
 
     @Test
     void getAllProducts() {
+        when(productRepository.findAll()).thenReturn(List.of(product));
+
+        List<Product> response = productService.getAllProducts();
+
+        assertNotNull(response);
+
+        assertEquals(1, response.size());
+
+        assertEquals(ID, response.get(0).getId());
+
+        assertEquals(NAME_CAR, response.get(0).getName());
     }
 
     @Test
     void deleteProduct() {
+
     }
 
     @Test
