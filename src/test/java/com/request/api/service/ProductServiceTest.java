@@ -145,7 +145,11 @@ class ProductServiceTest {
 
     @Test
     void deleteProduct() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
 
+        productService.deleteProduct(ID);
+
+        verify(productRepository, times(1)).deleteById(anyLong());
     }
 
     @Test
