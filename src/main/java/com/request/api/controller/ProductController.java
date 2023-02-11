@@ -37,8 +37,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> saveProduct(@Valid @RequestBody ProductRequestDTO request) {
-        Product productSaved = productService.upsertProduct(toDomain(request));
+    public ResponseEntity<ProductResponseDTO> saveProduct(@Valid @RequestBody ProductRequestDTO request, @RequestParam Long categoryId) {
+        Product productSaved = productService.upsertProduct(toDomain(request), categoryId);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productSaved.getId())
                 .toUri();
@@ -47,8 +47,8 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity<ProductResponseDTO> updateProduct(@Valid @RequestBody ProductRequestDTO request) {
-        Product productUpdated = productService.upsertProduct(toDomain(request));
+    public ResponseEntity<ProductResponseDTO> updateProduct(@Valid @RequestBody ProductRequestDTO request, @RequestParam Long categoryId) {
+        Product productUpdated = productService.upsertProduct(toDomain(request), categoryId);
 
         return ResponseEntity.ok(toProductResponseDTO(productUpdated));
     }

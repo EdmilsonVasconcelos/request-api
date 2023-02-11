@@ -27,9 +27,6 @@ public class ProductRequestDTO {
 	
 	private Double priceCredit;
 
-	@NotNull(message = "O id da categoria é obrigatório")
-	private Long categoryId;
-	
 	private String description;
 	
 	private Boolean available;

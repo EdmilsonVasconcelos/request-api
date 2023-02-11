@@ -27,13 +27,13 @@ public class ProductService {
 
 	private final CategoryService categoryService;
 
-	public Product upsertProduct(Product product) {
+	public Product upsertProduct(Product product, Long categoryId) {
 		if (product.getId() == null) {
 			existingProduct(product.getName());
 			product.setAvailable(Boolean.FALSE);
 		}
 
-		Category category = categoryService.getCategoryById(product.getCategory().getId());
+		Category category = categoryService.getCategoryById(categoryId);
 
 		product.setCategory(category);
 
