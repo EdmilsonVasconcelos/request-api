@@ -17,6 +17,7 @@ jobs:
     - name: Getting Postgres image from docker
       run: |
         docker run -d \
+        -p 5432:5432 \
         -e POSTGRES_USER=${{ env.POSTGRES_USER }} \
         -e POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }} \
         -e POSTGRES_DB=${{ env.POSTGRES_DB }} \
