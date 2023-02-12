@@ -10,6 +10,6 @@ FROM openjdk:11
 
 EXPOSE 8080
 
-COPY --from=build /home/app/target/*.jar /usr/local/lib/app.jar
+COPY --from=build /home/app/target/*.jar app.jar
 
 ENTRYPOINT ["sh", "-c", "java -jar /app.jar"]
