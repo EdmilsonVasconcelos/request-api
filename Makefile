@@ -10,7 +10,7 @@ stop-app:
 	docker-compose compose down
 
 run-db:
-	docker-compose compose up db
+	docker-compose compose up db -d
 
 stop-db:
 	docker-compose stop db
