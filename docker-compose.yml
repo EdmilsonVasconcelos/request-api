@@ -1,29 +1,33 @@
 version: "3.8"
 
 services:
-  mysqldb:
-    image: mysql:5.7
-    restart: unless-stopped
-    container_name: mysql
+  db:
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: request
+    container_name: postgres
     networks:
       - requestapp
-    volumes:
-      - /home/docker/volumes/myapp/mysql/:/var/lib/mysql/
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      - "5432:5432"
 
   app:
     depends_on:
-      - mysqldb
+      - db
     build: .
     container_name: app
     networks:
       - requestapp
     restart: on-failure
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/request?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/request
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
     ports:
       - "8080:8080"
 

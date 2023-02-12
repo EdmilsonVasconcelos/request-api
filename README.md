@@ -6,12 +6,12 @@
 - Spring Boot
 - Spring Data JPA
 - Spring Security
-- MySQL
+- PostgreSQL
 - Docker
 
 # Executando a aplicação local
 
-- Vá até a raíz do projeto e use o comando `make run-db` (você precisará do Docker). Após isso, o container do `MySQL` será iniciado. A partir deste momento você poderá rodar a aplicação na sua `IDE` de preferência. Ao iniciar a aplicação pela primeira vez, o banco de dados `request` e todas as tabelas serão criadas automaticamente. Os endpoints estão rodando na `http://localhost:8080`.
+- Vá até a raíz do projeto e use o comando `make run-db` (você precisará do Docker). Após isso, o container do `PostgreSQL` será iniciado. A partir deste momento você poderá rodar a aplicação na sua `IDE` de preferência. Ao iniciar a aplicação pela primeira vez, o banco de dados `request` e todas as tabelas serão criadas automaticamente. Os endpoints estão rodando na `http://localhost:8080`.
 
 # Acessando a área de administrador
 
@@ -29,7 +29,7 @@
 
 - Escolha um gerenciador de banco de dados de sua preferência. Alguns exemplos: `DBeaver`, `MySQL Workbeanch`.
 - Crie uma nova conexão
-  - usuário: root
-  - senha: espaço em branco
+  - usuário: postgres
+  - senha: postgres
   - banco de dados: request
-  - porta: 3306
+  - porta: 5432

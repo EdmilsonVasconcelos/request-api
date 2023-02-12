@@ -10,9 +10,9 @@ stop-app:
 	docker-compose compose down
 
 run-db:
-	docker-compose compose up mysqldb
+	docker-compose compose up db
 
 stop-db:
-	docker-compose stop mysqldb
+	docker-compose stop db
 
 run: build-artifact run-app
