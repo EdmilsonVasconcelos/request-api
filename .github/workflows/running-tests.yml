@@ -23,6 +23,7 @@ jobs:
         - "5432:5432"
 
   running-tests:
+    needs: postgres
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
