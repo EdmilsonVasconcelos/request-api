@@ -11,7 +11,7 @@ env:
   POSTGRES_DB: request
 
 jobs:
-  running-tests:
+  postgres:
     runs-on: ubuntu-latest
     container:
       image: postgres:15.2
@@ -22,6 +22,8 @@ jobs:
       ports:
         - "5432:5432"
 
+  running-tests:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
