@@ -11,19 +11,7 @@ env:
   POSTGRES_DB: request
 
 jobs:
-  postgres:
-    runs-on: ubuntu-latest
-    container:
-      image: postgres:15.2
-      env:
-        POSTGRES_USER: ${{ env.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-        POSTGRES_DB: ${{ env.POSTGRES_DB }}
-      ports:
-        - "5432:5432"
-
   running-tests:
-    needs: postgres
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
